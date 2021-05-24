@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Blog</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <form id="dataForm" enctype="multipart/form-data">
+        <textarea name="name">___NAME HERE___</textarea>
+        <textarea name="tags">___TAGS HERE___</textarea>
+        <textarea name="discription">___DISCRIPTION HERE___</textarea>
+        <input type="file" name="fileToUpload">
+        <input type="button" onclick="addBlog()" value="Submit">
+    </form>
+    <br>
+    <div id="listAtHere"></div>
+</body>
+<script>
+    const apiCallUrl = 'http://localhost/bloggster/adminBlog/';
+
+    $("#listAtHere").load(apiCallUrl + "listIt.php");
+
+    function addBlog() {
+        var formId = 'dataForm';
+        var formData = new FormData(document.getElementById(formId));
+        $.ajax({
+            url: apiCallUrl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(result) {
+                result = JSON.parse(result);
+                console.log(result);
+                alert(result.message);
+                if (result.status != 200) {
+                    console.error(result.message);
+                } else {
+                    console.log(result.message);
+                    document.getElementById(formId).reset();
+                    $("#listAtHere").load(apiCallUrl + "listIt.php");
+                }
+            }
+        });
+    }
+</script>
+
+</html>
