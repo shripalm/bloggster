@@ -1,3 +1,24 @@
+<?php
+    require_once 'config.php';
+    session_start();
+    if (!isset($_SESSION['pass'])) {
+        if (!isset($_GET['pass'])) {
+            echo "
+                    <script>
+                        var pass = prompt('Enter Password..!');
+                        location.replace('?pass='+pass)
+                    </script>
+                ";
+            exit;
+        } else {
+            if ($_GET['pass'] === PASS) {
+                $_SESSION['pass'] = true;
+            }
+            header('Location: add.php');
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +33,7 @@
 
 <body>
     <form id="dataForm" enctype="multipart/form-data">
-        <textarea name="name">___NAME HERE___</textarea>
+        <input type="text" placeholder="___NAME HERE___" name="name" />
         <textarea name="tags">___TAGS HERE___</textarea>
         <textarea name="discription">___DISCRIPTION HERE___</textarea>
         <input type="file" name="fileToUpload">
@@ -22,7 +43,7 @@
     <div id="listAtHere"></div>
 </body>
 <script>
-    const apiCallUrl = 'http://localhost/bloggster/adminBlog/';
+    const apiCallUrl = '/adminBlog/';
 
     $("#listAtHere").load(apiCallUrl + "listIt.php");
 

@@ -18,21 +18,22 @@
         $target_file = $target_dir . '/' . 'blogImage.jpg';
         $imageFileType = strtolower(pathinfo(basename($_FILES["fileToUpload"]["name"]),PATHINFO_EXTENSION));
         if(! getimagesize($fileArray["fileToUpload"]["tmp_name"])) retResponse(199, "File is not an image.");
-        if ($fileArray["fileToUpload"]["size"] > 500000) retResponse(199, "File is too large.");
+        if ($fileArray["fileToUpload"]["size"] > 1000000) retResponse(199, "File is too large.");
         if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) retResponse(199, "Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
         if (! move_uploaded_file($fileArray["fileToUpload"]["tmp_name"], $target_file)) retResponse(199, 'Sorry, there was an error uploading your file.');
     }
-    function createBlog($name, $tags, $discription){
+    function createBlog($title, $fName, $tags, $discription){
         if(! file_exists("template.html")) retResponse(199, "Template not found..!");
         $contents = file_get_contents("template.html");
-        $contents = str_replace('[&name]', $name, $contents);
+        $contents = str_replace('[&name]', $title, $contents);
         $contents = str_replace('[&tags]', $tags, $contents);
         $contents = str_replace('[&discription]', $discription, $contents);
-        $blogFile = fopen("../blog/$name/index.html", "w");
+        
+        $blogFile = fopen("../blog/$fName/index.html", "w");
         fwrite($blogFile, $contents);
         fclose($blogFile);
     }
-    function recordBlog($name){
+    function recordBlog($title, $discription){
         if(! file_exists("../blog/blogLog.json")){
             $blogFileInit = fopen("../blog/blogLog.json", "w");
             fwrite($blogFileInit, '{}');
@@ -40,9 +41,14 @@
         }
         $blogFileRead = json_decode(file_get_contents("../blog/blogLog.json"), true);
         $date = date('Y-m-d H:i:s');
-        $countBlog = count($blogFileRead);
-        $blogFileRead[$countBlog]['name'] = $name;
-        $blogFileRead[$countBlog]['datetime'] = $date;
+
+        $newBlogJson['name'] = str_replace(' ','-',strtolower($title));
+        $newBlogJson['title'] = $title;
+        $newBlogJson['discription'] = $discription;
+        $newBlogJson['datetime'] = $date;
+        
+        array_unshift($blogFileRead, $newBlogJson);
+
         $updatedRecord = json_encode($blogFileRead, true);
         $blogFile = fopen("../blog/blogLog.json", "w");
         fwrite($blogFile, $updatedRecord);
