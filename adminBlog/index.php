@@ -15,6 +15,7 @@
     fileUploadInBlog($fName, $_FILES);
     createBlog($title, $fName, $tags, $discription);
     recordBlog($title, substr($discription, 0, 100));
+    recordXML($fName);
     unset($_SESSION['folderName']);
     retResponse(200, 'Congrats! Your blog is created..!');
 ?>

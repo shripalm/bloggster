@@ -54,4 +54,48 @@
         fwrite($blogFile, $updatedRecord);
         fclose($blogFile);
     }
+    function recordXML($fName){
+        $xml = new DOMDocument('1.0', 'UTF-8');
+        $xml->load('../sitemap.xml');
+
+        $urlset = $xml->getElementsByTagName('urlset')->item(0);
+        $urlTag = $xml->createElement('url');
+            $urlTag->appendChild($xml->createElement('loc', "https://www.tanglecoder.com/blog/$fName/"));
+            $urlTag->appendChild($xml->createElement('lastmod', date('Y-m-d').'T'.date('H:i:s+00:00')));
+            $urlTag->appendChild($xml->createElement('priority', '0.51'));
+        $urlTag->setAttribute('name', $fName);
+        $urlset->appendChild($urlTag);
+        $xml->formatOutput = true;
+        $xml->save('../sitemap.xml');
+    }
+    function deleteDir($dirPath) {
+        if (! is_dir($dirPath)) {
+            return;
+        }
+        if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+            $dirPath .= '/';
+        }
+        $files = glob($dirPath . '*', GLOB_MARK);
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                deleteDir($file);
+            } else {
+                unlink($file);
+            }
+        }
+        rmdir($dirPath);
+    }
+    function unRecordBlog($blogFileRead){
+        $blogFile = fopen("../blog/blogLog.json", "w");
+        fwrite($blogFile, json_encode($blogFileRead));
+        fclose($blogFile);
+    }
+    function unRecordXML($name){
+        $xml = new DOMDocument('1.0', 'UTF-8');
+        $xml->load('../sitemap.xml');
+        $xp = new DOMXPath($xml);
+        $node = $xp->query("//*[@name='$name']")->item(0);
+        $node->parentNode->removeChild($node);
+        $xml->save('../sitemap.xml');
+    }
 ?>
