@@ -38,10 +38,14 @@
     <form id="dataForm" enctype="multipart/form-data">
         <input type="text" placeholder="___NAME HERE___" name="name" />
         <textarea name="tags">___TAGS HERE___</textarea>
-        <textarea name="discription">___DISCRIPTION HERE___</textarea>
+        <textarea name="discription" onchange="document.getElementById('output').innerHTML = this.value">___DISCRIPTION HERE___</textarea>
         <input type="file" name="fileToUpload">
         <input type="button" onclick="addBlog()" value="Submit">
     </form>
+    <br>
+    <div id="output" class="border w-50 ms-5" style="min-height: 480px;">
+        <span style="color: red;">Tahhfgj</span>
+    </div>
     <br>
     <div>
         <table border>
