@@ -44,7 +44,6 @@
     </form>
     <br>
     <div id="output" class="border w-50 ms-5" style="min-height: 480px;">
-        <span style="color: red;">Tahhfgj</span>
     </div>
     <br>
     <div>
