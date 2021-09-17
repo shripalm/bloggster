@@ -1,3 +1,3 @@
 <?php
-    define('PASS', 'JollyShark.223');
+    define('PASS', '123');
 ?>
