@@ -23,13 +23,18 @@
         if (! move_uploaded_file($fileArray["fileToUpload"]["tmp_name"], $target_file)) retResponse(199, 'Sorry, there was an error uploading your file.');
     }
     function createBlog($title, $fName, $tags, $discription){
-        if(! file_exists("template.html")) retResponse(199, "Template not found..!");
-        $contents = file_get_contents("template.html");
-        $contents = str_replace('[&name]', $title, $contents);
-        $contents = str_replace('[&tags]', $tags, $contents);
-        $contents = str_replace('[&discription]', $discription, $contents);
-        
-        $blogFile = fopen("../blog/$fName/index.html", "w");
+        if(! file_exists("template.php")) retResponse(199, "Template not found..!");
+        $contents = file_get_contents("template.php");
+        // $contents = str_replace('[&name]', $title, $contents);
+        // $contents = str_replace('[&tags]', $tags, $contents);
+        // $contents = str_replace('[&discription]', $discription, $contents);
+        $jsonData['name'] = $title;
+        $jsonData['tags'] = $tags;
+        $jsonData['discription'] = $discription;
+        $jsonDataFile = fopen("../blog/$fName/data.json", "w");
+        fwrite($jsonDataFile, json_encode($jsonData, true));
+        fclose($jsonDataFile);
+        $blogFile = fopen("../blog/$fName/index.php", "w");
         fwrite($blogFile, $contents);
         fclose($blogFile);
     }

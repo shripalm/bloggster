@@ -1,3 +1,13 @@
+<?php
+    $blogFileRead = json_decode(file_get_contents("data.json"), true);
+    $name = $blogFileRead['name'];
+    $tags = $blogFileRead['tags'];
+    $discription = $blogFileRead['discription'];
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,9 +15,9 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>[&name]</title>
-    <meta content="[&tags]" name="description">
-    <meta content="[&tags]" name="keywords">
+    <title><?php echo $name; ?></title>
+    <meta content="<?php echo $tags; ?>" name="description">
+    <meta content="<?php echo $tags; ?>" name="keywords">
 
     <!-- Favicons -->
     <link href="../../assets/img/favicon.png" rel="icon">
@@ -60,7 +70,7 @@
                     <ol>
                         <li><a href="../../index.html">Home</a></li>
                         <li><a href="../../blog.html">Blog</a></li>
-                        <li>[&name]</li>
+                        <li><?php echo $name; ?></li>
                     </ol>
                 </div>
 
@@ -79,18 +89,18 @@
                         <article class="entry entry-single">
 
                             <div class="entry-img">
-                                <img src="./blogImage.jpg" alt="[&name]" class="img-fluid">
+                                <img src="./blogImage.jpg" alt="<?php echo $name; ?>" class="img-fluid">
                             </div>
 
                             <h1 class="entry-title">
-                                <a href="#">[&name]</a>
+                                <a href="#"><?php echo $name; ?></a>
                             </h1>
 
 
 
                             <div class="entry-content">
                                 <p>
-                                    [&discription]
+                                    <?php echo $discription; ?>
                                 </p>
 
                             </div>
