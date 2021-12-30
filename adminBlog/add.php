@@ -235,7 +235,7 @@ if (!isset($_SESSION['pass'])) {
     }
 
     function insertImage(name) {
-        addTagFunction(`img src='/blog/extra-images/${name}' alt='' width="200"`, true);
+        addTagFunction(`img src='/blog/extra-images/${name}' alt='' width='200'`, true);
     }
 
 
