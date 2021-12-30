@@ -38,7 +38,7 @@ if (!isset($_SESSION['pass'])) {
         body {
             background-image: linear-gradient(to right, #8febd3, #95c9d7);
             width: 100vw;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
 
@@ -111,6 +111,22 @@ if (!isset($_SESSION['pass'])) {
             background: white;
             overflow-y: scroll;
         }
+
+        #tag-containers * {
+            margin: 2px 0px;
+        }
+
+        #listImages img {
+            float: left;
+            margin: 5px;
+            max-width: 150px;
+            transition: 0.5s;
+            cursor: pointer;
+        }
+
+        #listImages img:hover {
+            max-width: 250px;
+        }
     </style>
 </head>
 
@@ -121,21 +137,36 @@ if (!isset($_SESSION['pass'])) {
 
                 <input type="text" placeholder="___NAME HERE___" name="name" class="form__input" /><br>
                 <textarea class="form__input" name="tags">___TAGS HERE___</textarea><br>
-                <textarea class="form__input" name="discription" id="testText">___DISCRIPTION HERE___</textarea><br>
-                <button type="button" onclick="addTagFunction('br', true)">Break</button>
-                <button type="button" onclick="addTagFunction(`img src='' alt=''`, true)">Image</button>
-                <button type="button" onclick="addTagFunction('center')">Center</button>
-                <button type="button" onclick="addTagFunction('strong')">Bold</button>
-                <button type="button" onclick="addTagFunction('em')">Italic</button>
-                <button type="button" onclick="addTagFunction('ins')">Underline</button>
-                <button type="button" onclick="addTagFunction('del')">Delete</button>
-                <button type="button" onclick="addTagFunction('sub')">Subscripted</button>
-                <button type="button" onclick="addTagFunction('sup')">Superscripted</button>
-                <button type="button" onclick="addTagFunction('ol')">Order List</button>
-                <button type="button" onclick="addTagFunction('ul')">Unorder List</button>
-                <button type="button" onclick="addTagFunction('li')">List</button>
+                <textarea class="form__input" name="discription" id="testText">___DISCRIPTION HERE___</textarea>
+                <div class="mt-2" id="tag-containers">
+                    <button type="button" onclick="addTagFunction('br', true)">Break</button>
+                    <button type="button" onclick="addTagFunction(`img src='' alt=''`, true)">Image</button>
+                    <button type="button" onclick="addTagFunction('center')">Center</button>
+                    <button type="button" onclick="addTagFunction('strong')">Bold</button>
+                    <button type="button" onclick="addTagFunction('em')">Italic</button>
+                    <button type="button" onclick="addTagFunction('ins')">Underline</button>
+                    <button type="button" onclick="addTagFunction('del')">Delete</button>
+                    <button type="button" onclick="addTagFunction('sub')">Subscripted</button>
+                    <button type="button" onclick="addTagFunction('sup')">Superscripted</button>
+                    <button type="button" onclick="addTagFunction('ol')">Order List</button>
+                    <button type="button" onclick="addTagFunction('ul')">Unorder List</button>
+                    <button type="button" onclick="addTagFunction('li')">List</button>
+                    <input id="custom-tag" />
+                    <button type="button" onclick="addTagFunction(document.getElementById('custom-tag').value)">Add Custom</button>
+                    <div class="mt-2">
+                    </div>
+                </div>
+                <div id="listImages" class="mt-2 border">
+
+                </div>
                 <input class="form__input" type="file" name="fileToUpload"><br>
                 <input class="form-button" type="button" onclick="addBlog()" value="Submit">
+            </form>
+            <form id="imageForm" class="mt-2" enctype="multipart/form-data">
+                <h3>Image add:</h3>
+                <input class="form__input" type="text" name="name" placeholder="Name Image Here" />
+                <input class="form__input" type="file" name="imageFileUpload" />
+                <input class="form-button mt-2" type="button" onclick="addImage()" value="Upload">
             </form>
             <br>
         </div>
@@ -178,6 +209,7 @@ if (!isset($_SESSION['pass'])) {
     const apiCallUrl = '/adminBlog/';
 
     $("#listAtHere").load(apiCallUrl + "listIt.php");
+    $("#listImages").load(apiCallUrl + "listImages.php");
 
     function addBlog() {
         var formId = 'dataForm';
@@ -197,6 +229,34 @@ if (!isset($_SESSION['pass'])) {
                     console.log(result.message);
                     document.getElementById(formId).reset();
                     $("#listAtHere").load(apiCallUrl + "listIt.php");
+                }
+            }
+        });
+    }
+
+    function insertImage(name) {
+        addTagFunction(`img src='/blog/extra-images/${name}' alt='' width="200"`, true);
+    }
+
+
+    function addImage() {
+        var formId = 'imageForm';
+        var formData = new FormData(document.getElementById(formId));
+        $.ajax({
+            url: apiCallUrl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(result) {
+                result = JSON.parse(result);
+                alert(result.message);
+                if (result.status != 200) {
+                    console.error(result.message);
+                } else {
+                    console.log(result.message);
+                    document.getElementById(formId).reset();
+                    $("#listImages").load(apiCallUrl + "listImages.php");
                 }
             }
         });

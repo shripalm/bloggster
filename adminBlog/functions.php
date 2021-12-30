@@ -22,6 +22,17 @@
         if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) retResponse(199, "Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
         if (! move_uploaded_file($fileArray["fileToUpload"]["tmp_name"], $target_file)) retResponse(199, 'Sorry, there was an error uploading your file.');
     }
+
+    function extraFileUpload($name, $fileArray){
+        $target_dir = "../blog/extra-images";
+        $imageFileType = strtolower(pathinfo(basename($_FILES["imageFileUpload"]["name"]),PATHINFO_EXTENSION));
+        $target_file = $target_dir . '/' . $name . '.' . $imageFileType;
+        if(! getimagesize($fileArray["imageFileUpload"]["tmp_name"])) retResponse(199, "File is not an image.");
+        if ($fileArray["imageFileUpload"]["size"] > 1000000) retResponse(199, "File is too large.");
+        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) retResponse(199, "Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+        if (! move_uploaded_file($fileArray["imageFileUpload"]["tmp_name"], $target_file)) retResponse(199, 'Sorry, there was an error uploading your file.');
+    }
+
     function createBlog($title, $fName, $tags, $discription){
         if(! file_exists("template.php")) retResponse(199, "Template not found..!");
         $contents = file_get_contents("template.php");

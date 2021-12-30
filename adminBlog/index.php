@@ -4,6 +4,12 @@
     if(! isset($_POST['name']) ) header('Location: add.php');
     if(! isset($_SESSION['pass'])) die('Not Authorized');
     require 'functions.php';
+    if(isset($_FILES['imageFileUpload'])){
+        if(! file_exists("../blog/extra-images")) mkdir("../blog/extra-images");
+        extraFileUpload($_POST['name'], $_FILES);
+        retResponse(200, 'Uploaded Bro..!');
+        exit;
+    }
     $title = takeValue('name', $_POST['name'], true);
     $fName = str_replace(' ','-',strtolower($title));
     $tags = takeValue('tags', $_POST['tags'], true);
