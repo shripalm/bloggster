@@ -116,6 +116,11 @@ if (!isset($_SESSION['pass'])) {
             margin: 2px 0px;
         }
 
+        #listImages {
+            overflow-y: scroll;
+            max-height: 200px;
+        }
+
         #listImages img {
             float: left;
             margin: 5px;
@@ -125,7 +130,7 @@ if (!isset($_SESSION['pass'])) {
         }
 
         #listImages img:hover {
-            max-width: 250px;
+            max-width: 160px;
         }
     </style>
 </head>
